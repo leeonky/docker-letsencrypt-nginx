@@ -1,18 +1,8 @@
 # /usr/share/deploy/nginx/
 #	conf.d
-#	domain-list
 #	www
-# domain list file
-#/etc/nginx/domain-list/http
-#/etc/nginx/domain-list/https
+#	letsencrypt
 
-# http
-# 1 remove useless site
-# 2 load config
-# 3 over write new config
-# 4 restart nginx
-
-# https
 # 1 remove useless site
 # 2 load config
 # 3 over write new http config
@@ -24,10 +14,9 @@
 # loop for renew certs
 
 # conf 
-# www.x.com.http.conf
-# www.x.com.http.conf.d
-# www.x.com.https.conf
-# www.x.com.https.conf.d
+# www.x.com.https
+# www.x.com.https-cert.conf
+# www.x.com.https-serve.conf
 
 CONF_PATH="/etc/nginx/conf.d/"
 DOMAIN_PATH="/etc/nginx/domain-list/"
