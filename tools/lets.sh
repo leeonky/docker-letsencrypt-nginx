@@ -72,9 +72,13 @@ obtain_certs() {
 	do
 		local server_name=$(get_server_names "$file")
 		local first_domain=$(echo $server_name | awk '{print $1}')
+		local cert_path=$(certbot certificates -d $first_domain 2>/dev/null | grep 'Path:' | awk -F\: '{print $2}' | awk '{print $1}')
+		local fullchain_path=$(echo "$cert_path" | grep fullchain)
+		local privkey_path=$(echo "$cert_path" | grep privkey)
 		(
 			echo "define(CONF_FILE, $file)"
-			echo "define(DOMAIN_NAME, $first_domain)"
+			echo "define(FULLCHAIN, $fullchain_path)"
+			echo "define(PRIVKEY, $privkey_path)"
 			cat "$PRJ_PATH/tools/https-serve.m4"
 		) | m4 > "${file}-serve.conf"
 	done

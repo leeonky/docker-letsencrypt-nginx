@@ -55,15 +55,31 @@ test_should_create_ssl_conf() {
 	server_name www.baidu.com www.b.com;
 EOF
 	LETS_EMAIL=leeonky@gmail.com
-	mock_function certbot
+	mock_function certbot "if [ \$1 == certificates ] && [ \$2 == -d ] && [ \$3 == www.baidu.com ]; then
+cat>&2 <<EOF
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+openssl not installed, can't check revocation
+EOF
+cat <<EOF
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Found the following matching certs:
+  Certificate Name: www.play-x.fun
+    Domains: www.play-x.fun
+    Expiry Date: 2019-07-31 15:11:10+00:00 (VALID: 89 days)
+    Certificate Path: /etc/letsencrypt/live/www.play-x.fun/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/www.play-x.fun/privkey.pem
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+EOF
+fi"
 
 	obtain_certs
 
 	assertFileExist $CONF_PATH/www.baidu.com.https-serve.conf
 
 	assertGrep "include ${CONF_PATH}www.baidu.com.https;" $CONF_PATH/www.baidu.com.https-serve.conf
-	assertGrep 'ssl_certificate /etc/letsencrypt/live/www.baidu.com/fullchain.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
-	assertGrep 'ssl_certificate_key /etc/letsencrypt/live/www.baidu.com/privkey.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
+	assertGrep 'ssl_certificate /etc/letsencrypt/live/www.play-x.fun/fullchain.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
+	assertGrep 'ssl_certificate_key /etc/letsencrypt/live/www.play-x.fun/privkey.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
 }
 
 test_should_remove_certs_when_no_serve_conf() {
