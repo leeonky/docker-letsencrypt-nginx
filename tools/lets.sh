@@ -66,7 +66,7 @@ obtain_certs() {
 			domain_opts="$domain_opts -d $url"
 		done
 	done
-	certbot certonly --webroot -w /var/www/letsencrypt $domain_opts -m $LETS_EMAIL --agree-tos --non-interactive
+	certbot certonly --webroot -w /var/www/letsencrypt $domain_opts -m $LETS_EMAIL --agree-tos --non-interactive --expand
 
 	for file in $(ls ${CONF_PATH}*.https 2>/dev/null)
 	do

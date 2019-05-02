@@ -47,7 +47,7 @@ EOF
 
 	obtain_certs
 
-	mock_verify certbot HAS_CALLED_WITH certonly --webroot -w /var/www/letsencrypt -d www.baidu.com -d www.b.com -m leeonky@gmail.com --agree-tos --non-interactive
+	mock_verify certbot HAS_CALLED_WITH certonly --webroot -w /var/www/letsencrypt -d www.baidu.com -d www.b.com -m leeonky@gmail.com --agree-tos --non-interactive --expand
 }
 
 test_should_create_ssl_conf() {
@@ -62,8 +62,8 @@ EOF
 	assertFileExist $CONF_PATH/www.baidu.com.https-serve.conf
 
 	assertGrep "include ${CONF_PATH}www.baidu.com.https;" $CONF_PATH/www.baidu.com.https-serve.conf
-	assertGrep 'ssl_certificate /var/certs/live/www.baidu.com/fullchain.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
-	assertGrep 'ssl_certificate_key /var/certs/live/www.baidu.com/privkey.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
+	assertGrep 'ssl_certificate /etc/letsencrypt/live/www.baidu.com/fullchain.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
+	assertGrep 'ssl_certificate_key /etc/letsencrypt/live/www.baidu.com/privkey.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
 }
 
 . /share/shunit2/src/shunit2
