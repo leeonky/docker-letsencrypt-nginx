@@ -6,6 +6,7 @@ PRJ_PATH=$(dirname "$0")/../
 remove_domains &&\
 config_domains &&\
 reset_nginx &&\
+remove_certs &&\
 obtain_certs &&\
 reset_nginx
 

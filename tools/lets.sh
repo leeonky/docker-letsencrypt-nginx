@@ -80,3 +80,10 @@ obtain_certs() {
 	done
 }
 
+remove_certs() {
+	for domain in $(certbot certificates 2>/dev/null | grep 'Certificate Name' | awk '{print $3}')
+	do
+		[ -e "$CONF_PATH/$domain--serve.conf" ] || certbot delete --cert-name $domain
+	done
+}
+
