@@ -95,6 +95,7 @@ fi"
 	remove_certs
 
 	mock_verify certbot HAS_CALLED_WITH delete --cert-name www.t1.play-x.fun
+	mock_verify certbot NEVER_CALLED_WITH delete --cert-name www.play-x.fun
 }
 
 . /share/shunit2/src/shunit2
