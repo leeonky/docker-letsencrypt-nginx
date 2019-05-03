@@ -97,7 +97,7 @@ remove_certs_by_domain() {
 remove_certs() {
 	for domain in $(certbot certificates 2>/dev/null | grep 'Certificate Name' | awk '{print $3}')
 	do
-		[ -e "$CONF_PATH/$domain--serve.conf" ] || certbot delete --cert-name $domain
+		[ -e "$CONF_PATH/$domain.https-serve.conf" ] || certbot delete --cert-name $domain
 	done
 	certbot certificates
 }
