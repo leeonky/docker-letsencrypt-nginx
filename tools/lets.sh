@@ -90,6 +90,7 @@ remove_certs() {
 	for domain in $(certbot certificates 2>/dev/null| grep 'Domains:' | awk -F\: '{print $2}')
 	do
 		is_domain_exist $domain || certbot delete -d $domain
+		certbot certificates
 	done
 }
 
