@@ -115,7 +115,7 @@ cat <<EOF
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Found the following certs:
   Certificate Name: www.t1.play-x.fun
-    Domains: www.t1.play-x.fun
+    Domains: www.t1.play-x.fun www.t2.play-x.fun
     Expiry Date: 2019-07-11 14:04:09+00:00 (VALID: 70 days)
     Certificate Path: /etc/letsencrypt/live/www.t1.play-x.fun/fullchain.pem
     Private Key Path: /etc/letsencrypt/live/www.t1.play-x.fun/privkey.pem
@@ -127,12 +127,14 @@ Found the following certs:
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 EOF
 fi"
-	touch $CONF_PATH/www.play-x.fun.https-serve.conf
+	echo 'server_name www.t1.play-x.fun;' > $CONF_PATH/www.t1.play-x.fun.https
+	echo 'server_name www.play-x.fun;' > $CONF_PATH/www.play-x.fun.https
 
 	remove_certs
 
-	mock_verify certbot HAS_CALLED_WITH delete --cert-name www.t1.play-x.fun
-	mock_verify certbot NEVER_CALLED_WITH delete --cert-name www.play-x.fun
+	mock_verify certbot HAS_CALLED_WITH delete -d www.t2.play-x.fun
+	mock_verify certbot NEVER_CALLED_WITH delete -d www.t1.play-x.fun
+	mock_verify certbot NEVER_CALLED_WITH delete -d www.play-x.fun
 }
 
 . /share/shunit2/src/shunit2

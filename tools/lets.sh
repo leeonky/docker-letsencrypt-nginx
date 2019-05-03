@@ -1,22 +1,7 @@
 # /usr/share/deploy/nginx/
-#	conf.d
-#	www
+#	conf.d/sites
+#	www-lets
 #	letsencrypt
-
-# 1 remove useless site
-# 2 load config
-# 3 over write new http config
-# 4 restart nginx
-# 3 over write new https config
-# 5 obtain certs
-# 6 restart nginx
-
-# loop for renew certs
-
-# conf 
-# www.x.com.https
-# www.x.com.https-cert.conf
-# www.x.com.https-serve.conf
 
 CONF_PATH="/etc/nginx/conf.d/"
 DOMAIN_PATH="/etc/nginx/domain-list/"
@@ -90,10 +75,24 @@ obtain_certs() {
 	done
 }
 
-remove_certs() {
-	for domain in $(certbot certificates 2>/dev/null | grep 'Certificate Name' | awk '{print $3}')
+is_domain_exist() {
+	for file in $(ls ${CONF_PATH}*.https 2>/dev/null)
 	do
-		[ -e "$CONF_PATH/$domain.https-serve.conf" ] || certbot delete --cert-name $domain
+		local server_name=$(get_server_names "$file")
+		for url in $server_name
+		do
+			if [ $url == $1 ]; then
+				return 0
+			fi
+		done
+	done
+	return 1
+}
+
+remove_certs() {
+	for domain in $(certbot certificates 2>/dev/null| grep 'Domains:' | awk -F\: '{print $2}')
+	do
+		is_domain_exist $domain || certbot delete -d $domain
 	done
 }
 
