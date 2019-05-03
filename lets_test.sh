@@ -19,14 +19,35 @@ test_remove_useless_http() {
 	touch $CONF_PATH/www.sina.com.https-cert.conf
 	touch $CONF_PATH/www.sina.com.https-serve.conf
 	touch $CONF_PATH/www.sina.com.https
+	touch $CONF_PATH/www.sohu.com.https-cert.conf
+	touch $CONF_PATH/www.sohu.com.https-serve.conf
+	touch $CONF_PATH/www.sohu.com.https
+	touch $CONF_PATH/www.a.com.conf
+	touch $CONF_PATH/www.b.com.conf
+
+	mkdir -p $CONF_PATH/sites
+	touch $CONF_PATH/sites/www.sohu.com.https
+	touch $CONF_PATH/sites/www.b.com.conf
+	touch $CONF_PATH/sites/www.c.com.conf
 
 	remove_domains
 
 	assertFileNotExist $CONF_PATH/www.baidu.com.https-cert.conf
 	assertFileNotExist $CONF_PATH/www.baidu.com.https-serve.conf
-	assertFileExist $CONF_PATH/www.sina.com.https-cert.conf
-	assertFileExist $CONF_PATH/www.sina.com.https-serve.conf
-	assertFileExist $CONF_PATH/www.sina.com.https
+	assertFileNotExist $CONF_PATH/www.sina.com.https-cert.conf
+	assertFileNotExist $CONF_PATH/www.sina.com.https-serve.conf
+	assertFileNotExist $CONF_PATH/www.sina.com.https
+	assertFileNotExist $CONF_PATH/www.a.com.conf
+
+	assertFileExist $CONF_PATH/www.sohu.com.https-cert.conf
+	assertFileExist $CONF_PATH/www.sohu.com.https-serve.conf
+	assertFileExist $CONF_PATH/www.sohu.com.https
+	assertFileExist $CONF_PATH/www.b.com.conf
+	assertFileExist $CONF_PATH/www.c.com.conf
+
+	assertFileNotExist $CONF_PATH/sites/www.sohu.com.https
+	assertFileNotExist $CONF_PATH/sites/www.b.com.conf
+	assertFileNotExist $CONF_PATH/sites/www.c.com.conf
 }
 
 test_https_config_content() {

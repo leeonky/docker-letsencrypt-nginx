@@ -22,14 +22,20 @@ CONF_PATH="/etc/nginx/conf.d/"
 DOMAIN_PATH="/etc/nginx/domain-list/"
 
 remove_domains() {
-	for file in $(ls ${CONF_PATH}*https-*.conf 2>/dev/null)
+	for file in $(find ${CONF_PATH} -maxdepth 1 -type f 2>/dev/null)
 	do
 		local conf_file="${file/-cert.conf/}"
 		conf_file="${conf_file/-serve.conf/}"
-		[ -e "$conf_file" ] || (
+		local file_name=$(basename "$conf_file")
+		[ -e "$CONF_PATH/sites/$file_name" ] || (
 			echo "Removing conf for $file..."
-			rm "$file"
+			rm -f "$file"
 		)
+	done
+
+	for file in $(find ${CONF_PATH}/sites -maxdepth 1 -type f 2>/dev/null)
+	do
+		mv $file $CONF_PATH/
 	done
 }
 
