@@ -86,11 +86,19 @@ is_domain_exist() {
 	return 1
 }
 
-remove_certs() {
+remove_certs_by_domain() {
 	for domain in $(certbot certificates 2>/dev/null| grep 'Domains:' | awk -F\: '{print $2}')
 	do
 		is_domain_exist $domain || certbot delete -d $domain
 		certbot certificates
 	done
+}
+
+remove_certs() {
+	for domain in $(certbot certificates 2>/dev/null | grep 'Certificate Name' | awk '{print $3}')
+	do
+		[ -e "$CONF_PATH/$domain--serve.conf" ] || certbot delete --cert-name $domain
+	done
+	certbot certificates
 }
 

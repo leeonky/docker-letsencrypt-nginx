@@ -99,7 +99,7 @@ fi"
 	assertGrep 'ssl_certificate_key /etc/letsencrypt/live/www.play-x.fun/privkey.pem;' $CONF_PATH/www.baidu.com.https-serve.conf
 }
 
-test_should_remove_certs_when_no_serve_conf() {
+test_should_remove_certs_by_domain_when_no_serve_conf() {
 	mock_function certbot "if [ \$1 == certificates ]; then
 cat>&2 <<EOF
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
@@ -126,12 +126,43 @@ fi"
 	echo 'server_name www.t1.play-x.fun;' > $CONF_PATH/www.t1.play-x.fun.https
 	echo 'server_name www.play-x.fun;' > $CONF_PATH/www.play-x.fun.https
 
-	remove_certs
+	remove_certs_by_domain
 
 	mock_verify certbot HAS_CALLED_WITH delete -d www.t2.play-x.fun
 	mock_verify certbot NEVER_CALLED_WITH delete -d www.t1.play-x.fun
 	mock_verify certbot NEVER_CALLED_WITH delete -d www.play-x.fun
 }
+
+test_should_remove_certs_when_no_serve_conf() {
+	mock_function certbot "if [ \$1 == certificates ]; then
+cat>&2 <<EOF
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+openssl not installed, can't check revocation
+openssl not installed, can't check revocation
+EOF
+cat <<EOF
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Found the following certs:
+  Certificate Name: www.t1.play-x.fun
+    Domains: www.t1.play-x.fun
+    Expiry Date: 2019-07-11 14:04:09+00:00 (VALID: 70 days)
+    Certificate Path: /etc/letsencrypt/live/www.t1.play-x.fun/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/www.t1.play-x.fun/privkey.pem
+  Certificate Name: www.play-x.fun
+    Domains: www.play-x.fun
+    Expiry Date: 2019-07-18 14:29:06+00:00 (VALID: 77 days)
+    Certificate Path: /etc/letsencrypt/live/www.play-x.fun/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/www.play-x.fun/privkey.pem
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+EOF
+fi"
+	touch $CONF_PATH/www.play-x.fun.https-serve.conf
+
+	remove_certs
+
+	mock_verify certbot HAS_CALLED_WITH delete --cert-name www.t1.play-x.fun
+}
+
 
 . /share/shunit2/src/shunit2
 
