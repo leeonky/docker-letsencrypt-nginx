@@ -64,7 +64,7 @@ EOF
 
 	obtain_certs
 
-	mock_verify certbot HAS_CALLED_WITH certonly --webroot -w /var/www-lets/letsencrypt -m leeonky@gmail.com --agree-tos --non-interactive --expand -d www.baidu.com -d www.b.com
+	mock_verify certbot HAS_CALLED_WITH certonly --webroot -w /var/www-lets/letsencrypt -m leeonky@gmail.com --cert-name www.baidu.com --agree-tos --non-interactive --expand -d www.baidu.com -d www.b.com
 }
 
 test_should_create_ssl_conf() {

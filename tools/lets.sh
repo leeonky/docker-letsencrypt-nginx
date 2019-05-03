@@ -48,21 +48,18 @@ reset_nginx() {
 }
 
 obtain_certs() {
-	local domain_opts=""
 	for file in $(ls ${CONF_PATH}*.https 2>/dev/null)
 	do
+		local domain_opts=""
 		local server_name=$(get_server_names "$file")
+		local first_domain=$(echo $server_name | awk '{print $1}')
 		for url in $server_name
 		do
 			domain_opts="$domain_opts -d $url"
 		done
-	done
-	certbot certonly --webroot -w /var/www-lets/letsencrypt -m $LETS_EMAIL --agree-tos --non-interactive --expand $domain_opts
 
-	for file in $(ls ${CONF_PATH}*.https 2>/dev/null)
-	do
-		local server_name=$(get_server_names "$file")
-		local first_domain=$(echo $server_name | awk '{print $1}')
+		certbot certonly --webroot -w /var/www-lets/letsencrypt -m $LETS_EMAIL --cert-name $first_domain --agree-tos --non-interactive --expand $domain_opts
+
 		local cert_path=$(certbot certificates -d $first_domain 2>/dev/null | grep 'Path:' | awk -F\: '{print $2}' | awk '{print $1}')
 		local fullchain_path=$(echo "$cert_path" | grep fullchain)
 		local privkey_path=$(echo "$cert_path" | grep privkey)
