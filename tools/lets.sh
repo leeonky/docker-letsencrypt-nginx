@@ -20,7 +20,7 @@ remove_domains() {
 
 	for file in $(find ${CONF_PATH}/sites -maxdepth 1 -type f 2>/dev/null)
 	do
-		mv $file $CONF_PATH/
+		cp $file $CONF_PATH/
 	done
 }
 

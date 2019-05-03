@@ -44,10 +44,6 @@ test_remove_useless_http() {
 	assertFileExist $CONF_PATH/www.sohu.com.https
 	assertFileExist $CONF_PATH/www.b.com.conf
 	assertFileExist $CONF_PATH/www.c.com.conf
-
-	assertFileNotExist $CONF_PATH/sites/www.sohu.com.https
-	assertFileNotExist $CONF_PATH/sites/www.b.com.conf
-	assertFileNotExist $CONF_PATH/sites/www.c.com.conf
 }
 
 test_https_config_content() {
