@@ -3,7 +3,7 @@ PRJ_PATH=$(dirname "$0")/../
 
 . ${PRJ_PATH}/tools/lets.sh
 
-echo ============= Start process certs ==================
+echo "======== Start process certs $(date) ========="
 remove_domains &&\
 config_domains &&\
 reset_nginx &&\
