@@ -14,6 +14,6 @@ echo ================ Process done ======================
 
 while true
 do
-	certbot renew
+	certbot renew --deploy-hook reset_nginx
 	sleep 3600
 done
