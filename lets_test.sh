@@ -30,7 +30,7 @@ test_remove_useless_http() {
 	touch $CONF_PATH/sites/www.b.com.conf
 	touch $CONF_PATH/sites/www.c.com.conf
 
-	remove_domains
+	remove_useless_domains
 
 	assertFileNotExist $CONF_PATH/www.baidu.com.https-cert.conf
 	assertFileNotExist $CONF_PATH/www.baidu.com.https-serve.conf
@@ -126,7 +126,7 @@ fi"
 	echo 'server_name www.t1.play-x.fun;' > $CONF_PATH/www.t1.play-x.fun.https
 	echo 'server_name www.play-x.fun;' > $CONF_PATH/www.play-x.fun.https
 
-	remove_certs_by_domain
+	remove_useless_certs_by_domain
 
 	mock_verify certbot HAS_CALLED_WITH delete -d www.t2.play-x.fun
 	mock_verify certbot NEVER_CALLED_WITH delete -d www.t1.play-x.fun
@@ -158,7 +158,7 @@ EOF
 fi"
 	touch $CONF_PATH/www.play-x.fun.https-serve.conf
 
-	remove_certs
+	remove_useless_certs
 
 	mock_verify certbot HAS_CALLED_WITH delete --cert-name www.t1.play-x.fun
 	mock_verify certbot NEVER_CALLED_WITH delete --cert-name www.play-x.fun

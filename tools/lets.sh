@@ -6,7 +6,7 @@
 CONF_PATH="/etc/nginx/conf.d/"
 DOMAIN_PATH="/etc/nginx/domain-list/"
 
-remove_domains() {
+remove_useless_domains() {
 	for file in $(find ${CONF_PATH} -maxdepth 1 -type f 2>/dev/null)
 	do
 		local conf_file="${file/-cert.conf/}"
@@ -87,7 +87,7 @@ is_domain_exist() {
 	return 1
 }
 
-remove_certs_by_domain() {
+remove_useless_certs_by_domain() {
 	for domain in $(certbot certificates 2>/dev/null| grep 'Domains:' | awk -F\: '{print $2}')
 	do
 		is_domain_exist $domain || certbot delete -d $domain
@@ -95,7 +95,7 @@ remove_certs_by_domain() {
 	done
 }
 
-remove_certs() {
+remove_useless_certs() {
 	for domain in $(certbot certificates 2>/dev/null | grep 'Certificate Name' | awk '{print $3}')
 	do
 		[ -e "$CONF_PATH/$domain.https-serve.conf" ] || certbot delete --cert-name $domain
