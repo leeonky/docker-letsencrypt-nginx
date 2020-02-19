@@ -37,7 +37,7 @@ config_domains() {
 		local server_name=$(get_server_names "$file")
 		(
 			echo "define(DOMAIN_NAME_LIST, $server_name)"
-			cat "$PRJ_PATH/tools/https-cert.m4"
+			cat "$PRJ_PATH/tools/m4s/https-cert.m4"
 		) | m4 > "${file}-cert.conf"
 	done
 }
@@ -68,7 +68,7 @@ obtain_certs() {
 			echo "define(CONF_FILE, $file)"
 			echo "define(FULLCHAIN, $fullchain_path)"
 			echo "define(PRIVKEY, $privkey_path)"
-			cat "$PRJ_PATH/tools/https-serve.m4"
+			cat "$PRJ_PATH/tools/m4s/https-serve.m4"
 		) | m4 > "${file}-serve.conf"
 	done
 }
